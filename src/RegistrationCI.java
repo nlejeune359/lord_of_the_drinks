@@ -11,7 +11,6 @@ public interface RegistrationCI extends RequiredCI, OfferedCI	{
 		double initialRange,
 		String routingInboundPortURI
 	);
-	
 	public Set<ConnectionInfo> registrationAccessPoint(
 		P2PAddressI address,
 		String communicationInboundPort,
@@ -19,7 +18,5 @@ public interface RegistrationCI extends RequiredCI, OfferedCI	{
 		double initialRange,
 		String routingInboundPortURI
 	);
-	
 	public void unregister(P2PAddressI address);
-	
 }
