@@ -1,3 +1,6 @@
+package interfaces;
+
+import components.NodeType;
 
 public class ConnectionInfo {
 	/**

@@ -1,3 +1,5 @@
+package interfaces;
+
 import java.util.Set;
 
 import fr.sorbonne_u.components.interfaces.OfferedCI;

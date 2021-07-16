@@ -1,3 +1,4 @@
+package interfaces;
 
 public interface P2PAddressI extends AddressI {
 	public default boolean isP2PAddress() {

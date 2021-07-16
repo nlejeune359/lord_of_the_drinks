@@ -1,18 +1,22 @@
+package components;
+
 import java.util.HashSet;
 import java.util.Set;
 
 import fr.sorbonne_u.components.AbstractComponent;
+import interfaces.PositionI;
+import interfaces.RegistrationCI;
+import interfaces.P2PAddressI;
+import interfaces.ConnectionInfo;
 
-enum NodeType {INTERNAL, ACCESSPOINT} ;  
-
-public class SimlatorComponent 
+public class SimulatorComponent
 extends AbstractComponent 
 implements RegistrationCI
 {
 	
 	private Set<ConnectionInfo> node =  new HashSet<ConnectionInfo>();
 
-	protected SimlatorComponent(int nbThreads, int nbSchedulableThreads) {
+	protected SimulatorComponent(int nbThreads, int nbSchedulableThreads) {
 		super(nbThreads, nbSchedulableThreads);
 		// TODO Auto-generated constructor stub
 	}

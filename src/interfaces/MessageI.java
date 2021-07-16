@@ -1,3 +1,7 @@
+package interfaces;
+
+import interfaces.AddressI;
+
 import java.io.Serializable;
 
 public interface MessageI {

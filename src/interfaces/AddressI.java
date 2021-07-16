@@ -1,3 +1,4 @@
+package interfaces;
 
 public interface AddressI {
 	public boolean isP2PAddress();

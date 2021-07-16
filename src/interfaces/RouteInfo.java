@@ -1,3 +1,6 @@
+package interfaces;
+
+import interfaces.AddressI;
 
 public class RouteInfo {
 	public AddressI getDestination() {
