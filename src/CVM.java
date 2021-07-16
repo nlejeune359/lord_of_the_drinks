@@ -22,11 +22,11 @@ public class CVM extends AbstractCVM {
     public static void main(String args[]) {
         try {
             CVM cvm = new CVM();
-            cvm.startSint nbThreads, int nbSchedulableThreadsint nbThreads, int nbSchedulableThreadsint nbThreads, int nbSchedulableThreadstandardLifeCycle(1000L);
+            cvm.startSint nbThreads(1000L);
             Thread.sleep(10000L);
             System.exit(0);
         } catch (Exception e) {
-            throw new RuntimeException(e);int nbThreads, int nbSchedulableThreads
+            throw new RuntimeException(e)int nbThreads, int nbSchedulableThreadsint nbThreads, int nbSchedulableThint nbThreads, int nbSchedulableThreadsreads;int nbThreads, int nbSchedulableThreads
         }
     }
 }
