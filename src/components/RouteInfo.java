@@ -1,4 +1,4 @@
-package interfaces;
+package components;
 
 import interfaces.AddressI;
 

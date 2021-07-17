@@ -4,50 +4,84 @@ import java.util.HashSet;
 import java.util.Set;
 
 import fr.sorbonne_u.components.AbstractComponent;
+import fr.sorbonne_u.components.annotations.OfferedInterfaces;
+import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
 import interfaces.PositionI;
 import interfaces.RegistrationCI;
+import ports.RegistrationInbound;
 import interfaces.P2PAddressI;
-import interfaces.ConnectionInfo;
 
-public class SimulatorComponent
-extends AbstractComponent 
-implements RegistrationCI
+@OfferedInterfaces(offered = {RegistrationCI.class})
+public class SimulatorComponent extends AbstractComponent 
 {
+	protected RegistrationInbound inboundPort;
+	public static final String REGISTRATIONNODEINBOUNDPORTURI = "rip-uri";
 	
-	private Set<ConnectionInfo> node =  new HashSet<ConnectionInfo>();
+	private Set<ConnectionInfo> node = new HashSet<>();
 
-	protected SimulatorComponent(int nbThreads, int nbSchedulableThreads) {
+	protected SimulatorComponent(int nbThreads, int nbSchedulableThreads) throws Exception {
 		super(nbThreads, nbSchedulableThreads);
-		// TODO Auto-generated constructor stub
+		this.inboundPort = new RegistrationInbound(REGISTRATIONNODEINBOUNDPORTURI, this);
+		this.inboundPort.publishPort();
 	}
-
-	@Override
-	public Set<ConnectionInfo> registrationInternal(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) {
-		node.add(new ConnectionInfo(
+	
+	public synchronized Set<ConnectionInfo> registerTerminalNode(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception
+	{
+		ConnectionInfo ci = new ConnectionInfo(
 			address, 
 			communicationInboundPort, 
 			routingInboundPortURI, 
 			initialPosition,
 			initialRange,
 			NodeType.INTERNAL
-		));
-		return this.node;
+		);
+		return this.getInPortee(ci);	
 	}
 
-	@Override
-	public Set<ConnectionInfo> registrationAccessPoint(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) {
-		// TODO Auto-generated method stub
-		return this.node;
+	public synchronized Set<ConnectionInfo> registerAccessPoint(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception
+	{
+		ConnectionInfo ci = new ConnectionInfo(
+			address, 
+			communicationInboundPort, 
+			routingInboundPortURI, 
+			initialPosition,
+			initialRange,
+			NodeType.ACCESSPOINT
+		);		
+		return this.getInPortee(ci);
 	}
-
-	@Override
-	public void unregister(P2PAddressI address) {
-		for(ConnectionInfo info : this.node) {
-			if(info.getAddress().equals(address))
-				node.remove(info);
+	
+	private synchronized Set<ConnectionInfo> getInPortee(ConnectionInfo ci) throws Exception {
+		Set<ConnectionInfo> res = new HashSet<ConnectionInfo>();
+		for(ConnectionInfo c : this.node) 
+		{
+			if(ci.getPos().distance(c.getPos()) <= ci.getRange()) {
+				res.add(c);
+			}
 		}
-		
+		node.add(ci);
+		return res;
 	}
 	
+	public synchronized void unregister(P2PAddressI address) throws Exception
+	{
+		for(ConnectionInfo c : this.node)
+		{
+			if(c.getAddress().equals(address)) {
+				node.remove(c);
+				break;
+			}
+		}
+	}	
 	
+	@Override
+	public synchronized void shutdown() throws ComponentShutdownException
+	{
+		try {
+			this.inboundPort.unpublishPort();
+		}  catch (Exception e) {
+			throw new ComponentShutdownException(e);
+		}
+		super.shutdown();
+	}
 }

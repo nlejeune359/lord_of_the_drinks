@@ -1,6 +1,7 @@
-package interfaces;
+package components;
 
-import components.NodeType;
+import interfaces.P2PAddressI;
+import interfaces.PositionI;
 
 public class ConnectionInfo {
 	/**
@@ -39,5 +40,13 @@ public class ConnectionInfo {
 	 */
 	public String getRoutingInboundPortURI() {
 		return this.routingInboundPortURI;
+	}
+	
+	public PositionI getPos() {
+		return this.initialPosition;
+	}
+	
+	public double getRange() {
+		return this.initialRange;
 	}
 }
