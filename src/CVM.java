@@ -1,3 +1,5 @@
+import components.NetworkAddress;
+import components.NetworkNodeComponent;
 import components.SimulatorComponent;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
@@ -13,7 +15,11 @@ public class CVM extends AbstractCVM {
     @Override
     public void deploy() throws Exception {
         AbstractComponent.createComponent(
-                SimulatorComponent.class.getCanonicalName(), new Object[]{0,1}
+                SimulatorComponent.class.getCanonicalName(), new Object[]{}
+        );
+
+        AbstractComponent.createComponent(
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NetworkAddress("tamere")}
         );
 
         super.deploy();
