@@ -10,16 +10,16 @@ import interfaces.P2PAddressI;
 import interfaces.PositionI;
 import interfaces.RegistrationCI;
 
-public class RegistrationInbound extends AbstractInboundPort implements RegistrationCI  {
+public class SimulatorInboundPort extends AbstractInboundPort implements RegistrationCI  {
 	private static final long serialVersionUID = 1L;
 
-	public RegistrationInbound(ComponentI owner) throws Exception
+	public SimulatorInboundPort(ComponentI owner) throws Exception
 	{
 		super(RegistrationCI.class, owner);
 		assert(owner instanceof SimulatorComponent);
 	}
 	
-	public RegistrationInbound(String uri, ComponentI owner) throws Exception
+	public SimulatorInboundPort(String uri, ComponentI owner) throws Exception
 	{
 		super(uri, RegistrationCI.class, owner);
 		assert(owner instanceof SimulatorComponent);

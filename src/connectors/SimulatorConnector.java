@@ -1,4 +1,4 @@
-package Connectors;
+package connectors;
 
 import java.util.Set;
 
@@ -8,7 +8,7 @@ import interfaces.P2PAddressI;
 import interfaces.PositionI;
 import interfaces.RegistrationCI;
 
-public class ConnectorSimulator  extends AbstractConnector implements RegistrationCI {
+public class SimulatorConnector extends AbstractConnector implements RegistrationCI {
 
 	@Override
 	public Set<ConnectionInfo> registrationInternal(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception {

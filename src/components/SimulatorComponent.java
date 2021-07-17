@@ -8,20 +8,22 @@ import fr.sorbonne_u.components.annotations.OfferedInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
 import interfaces.PositionI;
 import interfaces.RegistrationCI;
-import ports.RegistrationInbound;
+import ports.SimulatorInboundPort;
 import interfaces.P2PAddressI;
+import ports.SimulatorOutboundPort;
 
 @OfferedInterfaces(offered = {RegistrationCI.class})
 public class SimulatorComponent extends AbstractComponent 
 {
-	protected RegistrationInbound inboundPort;
-	public static final String REGISTRATIONNODEINBOUNDPORTURI = "rip-uri";
+	protected SimulatorInboundPort inboundPort;
+	protected SimulatorOutboundPort outboundPort;
+	public static final String REGISTRATION_NODE_INBOUND_PORT_URI = "rip-uri";
 	
 	private Set<ConnectionInfo> node = new HashSet<>();
 
-	protected SimulatorComponent(int nbThreads, int nbSchedulableThreads) throws Exception {
-		super(nbThreads, nbSchedulableThreads);
-		this.inboundPort = new RegistrationInbound(REGISTRATIONNODEINBOUNDPORTURI, this);
+	protected SimulatorComponent() throws Exception {
+		super(1, 0);
+		this.inboundPort = new SimulatorInboundPort(REGISTRATION_NODE_INBOUND_PORT_URI, this);
 		this.inboundPort.publishPort();
 	}
 	
