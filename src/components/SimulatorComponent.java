@@ -23,7 +23,7 @@ public class SimulatorComponent extends AbstractComponent
 
 	private Set<ConnectionInfo> node = new HashSet<>();
 
-	protected SimulatorComponent(String uri) throws Exception {
+	protected SimulatorComponent() throws Exception {
 		super(1, 0);
 		this.inboundPort = new SimulatorInboundPort(REGISTRATION_NODE_INBOUND_PORT_URI, this);
 		this.inboundPort.publishPort();

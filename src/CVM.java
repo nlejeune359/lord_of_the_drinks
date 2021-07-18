@@ -1,5 +1,6 @@
 import components.NetworkAddress;
 import components.NetworkNodeComponent;
+import components.NodePosition;
 import components.SimulatorComponent;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
@@ -19,7 +20,7 @@ public class CVM extends AbstractCVM {
         );
 
         AbstractComponent.createComponent(
-                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NetworkAddress("tamere")}
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{"simulatorURI", new NodePosition(0, 0), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
         );
 
         super.deploy();
