@@ -1,6 +1,7 @@
 package ports;
 
 import components.ConnectionInfo;
+import components.SimulatorComponent;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.interfaces.RequiredCI;
 import fr.sorbonne_u.components.ports.AbstractOutboundPort;
@@ -11,8 +12,17 @@ import interfaces.RegistrationCI;
 import java.util.Set;
 
 public class SimulatorOutboundPort extends AbstractOutboundPort implements RegistrationCI {
-    public SimulatorOutboundPort(String uri, Class<? extends RequiredCI> implementedInterface, ComponentI owner) throws Exception {
-        super(uri, implementedInterface, owner);
+
+    public SimulatorOutboundPort(ComponentI owner) throws Exception
+    {
+        super(RegistrationCI.class, owner);
+        assert(owner instanceof SimulatorComponent);
+    }
+
+    public SimulatorOutboundPort(String uri, ComponentI owner) throws Exception
+    {
+        super(uri, RegistrationCI.class, owner);
+        assert(owner instanceof SimulatorComponent);
     }
 
     @Override
