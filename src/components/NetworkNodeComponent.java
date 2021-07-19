@@ -21,8 +21,6 @@ public class NetworkNodeComponent extends AbstractComponent {
     protected NetworkNodeOutboundPort outboundPort;
     protected NetworkNodeInboundPort inboundPort;
     protected String SIMULATOR_URI;
-    public static final String NETWORK_NODE_INBOUND_PORT_URI = "nn-in-uri";
-    public static final String NETWORK_NODE_OUTBOUND_PORT_URI = "nn-out-uri";
     protected PositionI initialPosition;
     protected double initialRange;
     protected DeviceType deviceType;
@@ -45,9 +43,9 @@ public class NetworkNodeComponent extends AbstractComponent {
     protected void initialize() throws Exception
     {
         this.addr = generateAddr();
-        this.inboundPort = new NetworkNodeInboundPort(NETWORK_NODE_INBOUND_PORT_URI, this);
+        this.inboundPort = new NetworkNodeInboundPort(this);
         this.inboundPort.publishPort();
-        this.outboundPort = new NetworkNodeOutboundPort(NETWORK_NODE_OUTBOUND_PORT_URI, this);
+        this.outboundPort = new NetworkNodeOutboundPort(this);
         this.outboundPort.publishPort();
 
         this.toggleLogging();

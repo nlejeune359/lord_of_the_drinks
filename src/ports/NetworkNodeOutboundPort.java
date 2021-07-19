@@ -13,9 +13,9 @@ import java.util.Set;
 
 public class NetworkNodeOutboundPort extends AbstractOutboundPort implements NetworkNodeServicesCI, RegistrationCI {
 
-    public NetworkNodeOutboundPort(String uri, ComponentI owner) throws Exception
+    public NetworkNodeOutboundPort(ComponentI owner) throws Exception
     {
-        super(uri, NetworkNodeServicesCI.class, owner);
+        super(NetworkNodeServicesCI.class, owner);
     }
 
     @Override

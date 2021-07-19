@@ -7,8 +7,8 @@ import interfaces.NetworkNodeServicesCI;
 
 public class NetworkNodeInboundPort extends AbstractInboundPort implements NetworkNodeServicesCI {
 
-    public  NetworkNodeInboundPort(String uri, ComponentI owner) throws Exception
+    public NetworkNodeInboundPort(ComponentI owner) throws Exception
     {
-        super(uri, NetworkNodeServicesCI.class, owner);
+        super(NetworkNodeServicesCI.class, owner);
     }
 }
