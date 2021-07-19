@@ -14,6 +14,8 @@ public class NodePosition implements PositionI {
 
     @Override
     public double distance(PositionI other) {
-        return 0;
+    	x = (((NodePosition)other).x - this.x) * (((NodePosition)other).x - this.x);
+    	y = (((NodePosition)other).y - this.y) * (((NodePosition)other).y - this.y);
+        return Math.sqrt(x + y);
     }
 }

@@ -88,9 +88,7 @@ public class NetworkNodeComponent extends AbstractComponent {
             	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
             );
             System.out.println(this.neighbours);
-
-        } catch(Exception e)
-        {
+        } catch(Exception e) {
             throw new ComponentStartException(e);
         }
         super.start();
