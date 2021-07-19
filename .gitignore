@@ -26,5 +26,6 @@ hs_err_pid*
 .idea
 .metadata
 .project
+.classpath
 /bin/
 *.iml

@@ -34,9 +34,8 @@ public class NetworkNodeComponent extends AbstractComponent {
     }
 
     //String simulatorURI, PositionI position, double range, DeviceType type
-    protected NetworkNodeComponent(String simulatorURI, PositionI position, double range, DeviceType type) throws Exception {
+    protected NetworkNodeComponent(PositionI position, double range, DeviceType type) throws Exception {
         super(1, 0);
-        this.SIMULATOR_URI = simulatorURI;
         this.initialPosition = position;
         this.initialRange = range;
         this.deviceType = type;
@@ -69,19 +68,33 @@ public class NetworkNodeComponent extends AbstractComponent {
         return s;
     }
 
-    /*@Override
+    @Override
     public synchronized void start() throws ComponentStartException
     {
         try {
-            System.out.println("oui");
-            this.doPortConnection(this.outboundPort.getPortURI(), this.SIMULATOR_URI, NetworkNodeConnector.class.getCanonicalName());
-            this.neighbours = this.outboundPort.registrationInternal(this.addr, this.inboundPort.getPortURI(), this.initialPosition, this.initialRange, this.inboundPort.getPortURI());
+        	System.out.println("-- do port connection --");
+            this.doPortConnection(
+            	this.outboundPort.getPortURI(), 
+            	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI, 
+           		NetworkNodeConnector.class.getCanonicalName()
+            );
+            
+            System.out.println("-- registrationInternal --");
+            this.neighbours = this.outboundPort.registrationInternal(
+            	new NetworkAddress(this.addr),
+            	this.inboundPort.getPortURI(),
+            	this.initialPosition,
+            	this.initialRange,
+            	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
+            );
+            System.out.println(this.neighbours);
+
         } catch(Exception e)
         {
             throw new ComponentStartException(e);
         }
         super.start();
-    }*/
+    }
 
     @Override
     public synchronized void shutdown() throws ComponentShutdownException

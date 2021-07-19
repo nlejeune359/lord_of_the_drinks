@@ -20,7 +20,11 @@ public class CVM extends AbstractCVM {
         );
 
         AbstractComponent.createComponent(
-                NetworkNodeComponent.class.getCanonicalName(), new Object[]{"simulatorURI", new NodePosition(0, 0), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 0), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
+        );
+        
+        AbstractComponent.createComponent(
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
         );
 
         super.deploy();
