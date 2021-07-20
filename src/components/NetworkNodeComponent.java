@@ -52,7 +52,7 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
         this.SimulatorPort = new NetworkNodeOutboundPort(this);
         this.SimulatorPort.publishPort();
 
-        System.out.println("address : " + this.addr + " inboundPort: " +this.inboundPort.getPortURI() + " outboundPort: " +this.SimulatorPort.getPortURI());
+        //System.out.println("address : " + this.addr + " inboundPort: " +this.inboundPort.getPortURI() + " outboundPort: " +this.SimulatorPort.getPortURI());
         this.toggleLogging();
         this.toggleTracing();
     }
@@ -76,14 +76,14 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
     public synchronized void start() throws ComponentStartException
     {
         try {
-        	System.out.println("-- do port connection --");
+        	//System.out.println("-- do port connection --");
             this.doPortConnection(
             	this.SimulatorPort.getPortURI(),
             	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI, 
            		NetworkNodeConnector.class.getCanonicalName()
             );
             
-            System.out.println("-- registrationInternal --");
+            //System.out.println("-- registrationInternal --");
             this.neighbours = this.SimulatorPort.registrationInternal(
             	new NetworkAddress(this.addr),
             	this.inboundPort.getPortURI(),
@@ -92,7 +92,7 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
             	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
             );
 
-            this.logMessage("Neighbours : " +this.neighbours.toString());
+            this.logMessage("Neighbours : " + this.neighbours.toString());
 
             for(ConnectionInfo c: this.neighbours)
             {
@@ -103,7 +103,7 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
                         c.getCommunicationInboundPortURI(),
                         NetworkNodeConnector.class.getCanonicalName()
                 );
-                System.out.println("Port Connected");
+                // System.out.println("Port Connected");
                 this.outboundPorts.get(c.getCommunicationInboundPortURI()).connect(new NetworkAddress(this.addr), this.inboundPort.getPortURI(), this.outboundPorts.get(c.getCommunicationInboundPortURI()).getPortURI());
             }
         } catch(Exception e) {
@@ -127,7 +127,7 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
     @Override
     public void connect(P2PAddressI address, String communicationInboundPortURI, String routingInboundPortURI) throws Exception {
 
-        System.out.println("address: " + address + " communicationInboudPortURI: " + communicationInboundPortURI + " routingInboundPortURI: " + routingInboundPortURI);
+        // System.out.println("address: " + address + " communicationInboudPortURI: " + communicationInboundPortURI + " routingInboundPortURI: " + routingInboundPortURI);
 
         if(!containsPortURI(communicationInboundPortURI))
         {
