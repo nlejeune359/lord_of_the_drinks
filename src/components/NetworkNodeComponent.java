@@ -6,16 +6,19 @@ import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
 import fr.sorbonne_u.components.exceptions.ComponentStartException;
+import interfaces.MessageI;
 import interfaces.NetworkNodeServicesCI;
 import interfaces.P2PAddressI;
 import interfaces.PositionI;
 import ports.NetworkNodeInboundPort;
 import ports.NetworkNodeOutboundPort;
 
+import java.util.HashSet;
+import java.util.Iterator;
 import java.util.Set;
 
 @RequiredInterfaces(required = {NetworkNodeServicesCI.class})
-public class NetworkNodeComponent extends AbstractComponent {
+public class NetworkNodeComponent extends AbstractComponent implements NetworkNodeServicesCI {
 
     protected String addr;
     protected NetworkNodeOutboundPort outboundPort;
@@ -25,7 +28,7 @@ public class NetworkNodeComponent extends AbstractComponent {
     protected double initialRange;
     protected DeviceType deviceType;
 
-    protected Set<ConnectionInfo> neighbours;
+    protected Set<ConnectionInfo> neighbours = new HashSet<>();
 
     public enum DeviceType {
         SMARTPHONE, TABLET, LAPTOP, DESKTOP
@@ -86,6 +89,24 @@ public class NetworkNodeComponent extends AbstractComponent {
             	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
             );
             System.out.println(this.neighbours);
+
+            /*if(this.neighbours.size() > 0)
+            {
+                Iterator<ConnectionInfo> iterator = this.neighbours.iterator();
+
+                ConnectionInfo next;
+                while(iterator.hasNext())
+                {
+                    next = iterator.next();
+                    this.doPortConnection(
+                            this.outboundPort.getPortURI(),
+                            next.getCommunicationInboundPortURI(),
+                            NetworkNodeConnector.class.getCanonicalName()
+                    );
+                    this.outboundPort.connect(new NetworkAddress(this.addr), this.inboundPort.getPortURI(), next.getCommunicationInboundPortURI());
+                }
+            }*/
+
         } catch(Exception e) {
             throw new ComponentStartException(e);
         }
@@ -102,5 +123,44 @@ public class NetworkNodeComponent extends AbstractComponent {
         {
             throw new ComponentShutdownException(e);
         }
+    }
+
+    @Override
+    public void connect(P2PAddressI address, String communicationInboundPortURI, String routingInboundPortURI) throws Exception {
+
+        if(!containsPortURI(communicationInboundPortURI))
+        {
+            ConnectionInfo newNeighbour = new ConnectionInfo(
+                    address,
+                    communicationInboundPortURI,
+                    routingInboundPortURI
+            );
+            this.neighbours.add(newNeighbour);
+            this.doPortConnection(this.outboundPort.getPortURI(), communicationInboundPortURI, NetworkNodeComponent.class.getCanonicalName());
+            this.outboundPort.connect(new NetworkAddress(this.addr), this.inboundPort.getPortURI(), communicationInboundPortURI);
+        }
+    }
+
+    @Override
+    public void routeMessage(MessageI m) {
+
+    }
+
+    @Override
+    public void ping() {
+
+    }
+
+    private boolean containsPortURI(String communicationInboundPortURI)
+    {
+        Iterator<ConnectionInfo> iterator = this.neighbours.iterator();
+        ConnectionInfo next;
+        while(iterator.hasNext())
+        {
+            next = iterator.next();
+            if(next.getCommunicationInboundPortURI() == communicationInboundPortURI)
+                return true;
+        }
+        return false;
     }
 }

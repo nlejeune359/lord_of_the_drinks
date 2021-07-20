@@ -4,10 +4,7 @@ import components.ConnectionInfo;
 import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.interfaces.RequiredCI;
 import fr.sorbonne_u.components.ports.AbstractOutboundPort;
-import interfaces.NetworkNodeServicesCI;
-import interfaces.P2PAddressI;
-import interfaces.PositionI;
-import interfaces.RegistrationCI;
+import interfaces.*;
 
 import java.util.Set;
 
@@ -31,5 +28,20 @@ public class NetworkNodeOutboundPort extends AbstractOutboundPort implements Net
     @Override
     public void unregister(P2PAddressI address) throws Exception {
         ((RegistrationCI)this.getConnector()).unregister(address);
+    }
+
+    @Override
+    public void connect(P2PAddressI address, String communicationInboundPortURI, String routingInboundPortURI) throws Exception {
+        ((CommunicationCI)this.getConnector()).connect(address, communicationInboundPortURI, routingInboundPortURI);
+    }
+
+    @Override
+    public void routeMessage(MessageI m) {
+
+    }
+
+    @Override
+    public void ping() {
+
     }
 }

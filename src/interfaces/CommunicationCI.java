@@ -5,10 +5,10 @@ import fr.sorbonne_u.components.interfaces.RequiredCI;
 
 public interface CommunicationCI extends RequiredCI, OfferedCI{
 	public void connect(
-		P2PAddressI addresss, 
+		P2PAddressI address,
 		String communicationInboundPortURI, 
 		String routingInboundPortURI
-	);
-	public void routeMessage(MessageI m);
-	public void ping();
+	) throws Exception;
+	public void routeMessage(MessageI m) throws Exception;
+	public void ping() throws Exception;
 }

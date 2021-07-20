@@ -11,17 +11,11 @@ public class ConnectionInfo {
 	private P2PAddressI address;
 	private String communicationInboundPortURI;
 	private String routingInboundPortURI;
-	private PositionI initialPosition;
-	private double initialRange;
-	private NodeType nodeType;
 
-	public ConnectionInfo(P2PAddressI address, String communicationInboundPortURI, String routingInboundPortURI, PositionI initialPosition, double initialRange, NodeType nodeType) {
+	public ConnectionInfo(P2PAddressI address, String communicationInboundPortURI, String routingInboundPortURI) {
 		this.address = address;
 		this.communicationInboundPortURI = communicationInboundPortURI;
 		this.routingInboundPortURI = routingInboundPortURI;
-		this.initialPosition = initialPosition;
-		this.initialRange = initialRange;
-		this.nodeType = nodeType;
 	}
 	
 	public P2PAddressI getAddress() {
@@ -40,13 +34,5 @@ public class ConnectionInfo {
 	 */
 	public String getRoutingInboundPortURI() {
 		return this.routingInboundPortURI;
-	}
-	
-	public PositionI getPos() {
-		return this.initialPosition;
-	}
-	
-	public double getRange() {
-		return this.initialRange;
 	}
 }

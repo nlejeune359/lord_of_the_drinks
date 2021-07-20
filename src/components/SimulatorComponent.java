@@ -16,7 +16,7 @@ public class SimulatorComponent extends AbstractComponent
 {
 	protected SimulatorInboundPort inboundPort;
 	public static final String REGISTRATION_NODE_INBOUND_PORT_URI = "s-in-uri";
-	private Set<ConnectionInfo> node = new HashSet<>();
+	private Set<SimulatorConnectionInfo> node = new HashSet<>();
 
 	protected SimulatorComponent() throws Exception {
 		super(1, 0);
@@ -26,7 +26,7 @@ public class SimulatorComponent extends AbstractComponent
 	
 	public synchronized Set<ConnectionInfo> registerTerminalNode(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception
 	{
-		ConnectionInfo ci = new ConnectionInfo(
+		SimulatorConnectionInfo ci = new SimulatorConnectionInfo(
 			address,
 			communicationInboundPort, 
 			routingInboundPortURI, 
@@ -34,12 +34,12 @@ public class SimulatorComponent extends AbstractComponent
 			initialRange,
 			NodeType.INTERNAL
 		);
-		return this.getInPortee(ci);	
+		return this.getInRange(ci);
 	}
 
 	public synchronized Set<ConnectionInfo> registerAccessPoint(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception
 	{
-		ConnectionInfo ci = new ConnectionInfo(
+		SimulatorConnectionInfo ci = new SimulatorConnectionInfo(
 			address, 
 			communicationInboundPort, 
 			routingInboundPortURI, 
@@ -47,14 +47,14 @@ public class SimulatorComponent extends AbstractComponent
 			initialRange,
 			NodeType.ACCESSPOINT
 		);		
-		return this.getInPortee(ci);
+		return this.getInRange(ci);
 	}
 	
-	private synchronized Set<ConnectionInfo> getInPortee(ConnectionInfo ci) throws Exception {
+	private synchronized Set<ConnectionInfo> getInRange(SimulatorConnectionInfo ci) throws Exception {
 		Set<ConnectionInfo> res = new HashSet<ConnectionInfo>();
-		for(ConnectionInfo c : this.node) 
+		for(SimulatorConnectionInfo c : this.node)
 		{
-			if(ci.getPos().distance(c.getPos()) <= ci.getRange()) {
+			if(ci.getInitialPosition().distance(c.getInitialPosition()) <= ci.getInitialRange()) {
 				res.add(c);
 			}
 		}

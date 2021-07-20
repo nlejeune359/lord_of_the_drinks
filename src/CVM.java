@@ -1,7 +1,4 @@
-import components.NetworkAddress;
-import components.NetworkNodeComponent;
-import components.NodePosition;
-import components.SimulatorComponent;
+import components.*;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.cvm.AbstractCVM;
 
