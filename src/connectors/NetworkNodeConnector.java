@@ -28,8 +28,8 @@ public class NetworkNodeConnector extends AbstractConnector implements NetworkNo
     }
 
     @Override
-    public void routeMessage(MessageI m) {
-
+    public void routeMessage(MessageI m) throws Exception {
+        ((CommunicationCI)this.offering).routeMessage(m);
     }
 
     @Override

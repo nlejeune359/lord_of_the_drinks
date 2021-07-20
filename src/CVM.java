@@ -39,7 +39,7 @@ public class CVM extends AbstractCVM {
         try {
             CVM cvm = new CVM();
             cvm.startStandardLifeCycle(1000L);
-            Thread.sleep(100000L);
+            Thread.sleep(10000L);
             System.exit(0);
         } catch (Exception e) {
             throw new RuntimeException(e);

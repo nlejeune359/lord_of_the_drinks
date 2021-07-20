@@ -36,12 +36,12 @@ public class NetworkNodeOutboundPort extends AbstractOutboundPort implements Net
     }
 
     @Override
-    public void routeMessage(MessageI m) {
-
+    public void routeMessage(MessageI m) throws Exception {
+        ((CommunicationCI)this.getConnector()).routeMessage(m);
     }
 
     @Override
-    public void ping() {
-
+    public void ping() throws Exception {
+        ((CommunicationCI)this.getConnector()).ping();
     }
 }
