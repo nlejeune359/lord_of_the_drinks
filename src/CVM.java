@@ -24,6 +24,14 @@ public class CVM extends AbstractCVM {
                 NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
         );
 
+        AbstractComponent.createComponent(
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
+        );
+
+        AbstractComponent.createComponent(
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
+        );
+
         super.deploy();
     }
 
@@ -31,7 +39,7 @@ public class CVM extends AbstractCVM {
         try {
             CVM cvm = new CVM();
             cvm.startStandardLifeCycle(1000L);
-            Thread.sleep(10000L);
+            Thread.sleep(100000L);
             System.exit(0);
         } catch (Exception e) {
             throw new RuntimeException(e);

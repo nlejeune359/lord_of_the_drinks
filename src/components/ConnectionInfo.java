@@ -35,4 +35,13 @@ public class ConnectionInfo {
 	public String getRoutingInboundPortURI() {
 		return this.routingInboundPortURI;
 	}
+
+	@Override
+	public String toString() {
+		return "ConnectionInfo{" +
+				"address=" + address +
+				", communicationInboundPortURI='" + communicationInboundPortURI + '\'' +
+				", routingInboundPortURI='" + routingInboundPortURI + '\'' +
+				'}';
+	}
 }

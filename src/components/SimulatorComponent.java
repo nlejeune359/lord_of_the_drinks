@@ -55,7 +55,12 @@ public class SimulatorComponent extends AbstractComponent
 		for(SimulatorConnectionInfo c : this.node)
 		{
 			if(ci.getInitialPosition().distance(c.getInitialPosition()) <= ci.getInitialRange()) {
-				res.add(c);
+				ConnectionInfo connInf = new ConnectionInfo(
+						c.getAddress(),
+						c.getCommunicationInboundPortURI(),
+						c.getRoutingInboundPortURI()
+				);
+				res.add(connInf);
 			}
 		}
 		node.add(ci);
@@ -64,7 +69,7 @@ public class SimulatorComponent extends AbstractComponent
 	
 	public synchronized void unregister(P2PAddressI address) throws Exception
 	{
-		for(ConnectionInfo c : this.node)
+		for(SimulatorConnectionInfo c : this.node)
 		{
 			if(c.getAddress().equals(address)) {
 				node.remove(c);

@@ -1,7 +1,6 @@
 package components;
 
 import connectors.NetworkNodeConnector;
-import connectors.SimulatorConnector;
 import fr.sorbonne_u.components.AbstractComponent;
 import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
@@ -13,16 +12,18 @@ import interfaces.PositionI;
 import ports.NetworkNodeInboundPort;
 import ports.NetworkNodeOutboundPort;
 
+import java.util.HashMap;
 import java.util.HashSet;
-import java.util.Iterator;
+import java.util.Map;
 import java.util.Set;
 
 @RequiredInterfaces(required = {NetworkNodeServicesCI.class})
 public class NetworkNodeComponent extends AbstractComponent implements NetworkNodeServicesCI {
 
     protected String addr;
-    protected NetworkNodeOutboundPort outboundPort;
+    protected NetworkNodeOutboundPort SimulatorPort;
     protected NetworkNodeInboundPort inboundPort;
+    protected Map<String, NetworkNodeOutboundPort> outboundPorts = new HashMap<String, NetworkNodeOutboundPort>();
     protected String SIMULATOR_URI;
     protected PositionI initialPosition;
     protected double initialRange;
@@ -48,10 +49,12 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
         this.addr = generateAddr();
         this.inboundPort = new NetworkNodeInboundPort(this);
         this.inboundPort.publishPort();
-        this.outboundPort = new NetworkNodeOutboundPort(this);
-        this.outboundPort.publishPort();
+        this.SimulatorPort = new NetworkNodeOutboundPort(this);
+        this.SimulatorPort.publishPort();
 
+        System.out.println("address : " + this.addr + " inboundPort: " +this.inboundPort.getPortURI() + " outboundPort: " +this.SimulatorPort.getPortURI());
         this.toggleLogging();
+        this.toggleTracing();
     }
 
     private String generateAddr()
@@ -75,38 +78,34 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
         try {
         	System.out.println("-- do port connection --");
             this.doPortConnection(
-            	this.outboundPort.getPortURI(), 
+            	this.SimulatorPort.getPortURI(),
             	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI, 
            		NetworkNodeConnector.class.getCanonicalName()
             );
             
             System.out.println("-- registrationInternal --");
-            this.neighbours = this.outboundPort.registrationInternal(
+            this.neighbours = this.SimulatorPort.registrationInternal(
             	new NetworkAddress(this.addr),
             	this.inboundPort.getPortURI(),
             	this.initialPosition,
             	this.initialRange,
             	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
             );
-            System.out.println(this.neighbours);
 
-            /*if(this.neighbours.size() > 0)
+            this.logMessage("Neighbours : " +this.neighbours.toString());
+
+            for(ConnectionInfo c: this.neighbours)
             {
-                Iterator<ConnectionInfo> iterator = this.neighbours.iterator();
-
-                ConnectionInfo next;
-                while(iterator.hasNext())
-                {
-                    next = iterator.next();
-                    this.doPortConnection(
-                            this.outboundPort.getPortURI(),
-                            next.getCommunicationInboundPortURI(),
-                            NetworkNodeConnector.class.getCanonicalName()
-                    );
-                    this.outboundPort.connect(new NetworkAddress(this.addr), this.inboundPort.getPortURI(), next.getCommunicationInboundPortURI());
-                }
-            }*/
-
+                NetworkNodeOutboundPort outboundPort = new NetworkNodeOutboundPort(this);
+                this.outboundPorts.put(c.getCommunicationInboundPortURI(), outboundPort);
+                this.doPortConnection(
+                        this.outboundPorts.get(c.getCommunicationInboundPortURI()).getPortURI(),
+                        c.getCommunicationInboundPortURI(),
+                        NetworkNodeConnector.class.getCanonicalName()
+                );
+                System.out.println("Port Connected");
+                this.outboundPorts.get(c.getCommunicationInboundPortURI()).connect(new NetworkAddress(this.addr), this.inboundPort.getPortURI(), this.outboundPorts.get(c.getCommunicationInboundPortURI()).getPortURI());
+            }
         } catch(Exception e) {
             throw new ComponentStartException(e);
         }
@@ -118,7 +117,7 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
     {
         try {
             this.inboundPort.unpublishPort();
-            this.outboundPort.unpublishPort();
+            this.SimulatorPort.unpublishPort();
         } catch(Exception e)
         {
             throw new ComponentShutdownException(e);
@@ -128,6 +127,8 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
     @Override
     public void connect(P2PAddressI address, String communicationInboundPortURI, String routingInboundPortURI) throws Exception {
 
+        System.out.println("address: " + address + " communicationInboudPortURI: " + communicationInboundPortURI + " routingInboundPortURI: " + routingInboundPortURI);
+
         if(!containsPortURI(communicationInboundPortURI))
         {
             ConnectionInfo newNeighbour = new ConnectionInfo(
@@ -136,8 +137,22 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
                     routingInboundPortURI
             );
             this.neighbours.add(newNeighbour);
-            this.doPortConnection(this.outboundPort.getPortURI(), communicationInboundPortURI, NetworkNodeComponent.class.getCanonicalName());
-            this.outboundPort.connect(new NetworkAddress(this.addr), this.inboundPort.getPortURI(), communicationInboundPortURI);
+
+            this.logMessage("Neighbours : " + this.neighbours.toString());
+
+            NetworkNodeOutboundPort outboundPort = new NetworkNodeOutboundPort(this);
+            this.outboundPorts.put(communicationInboundPortURI, outboundPort);
+
+            /*System.out.println(this.outboundPorts.get(communicationInboundPortURI).getPortURI());
+            System.out.println(this.isPortConnected(this.outboundPorts.get(communicationInboundPortURI).getPortURI()));
+            System.out.println(communicationInboundPortURI);*/
+
+            this.doPortConnection(
+                    this.outboundPorts.get(communicationInboundPortURI).getPortURI(),
+                    communicationInboundPortURI,
+                    NetworkNodeConnector.class.getCanonicalName()
+            );
+            this.outboundPorts.get(communicationInboundPortURI).connect(new NetworkAddress(this.addr), this.inboundPort.getPortURI(), communicationInboundPortURI);
         }
     }
 
@@ -151,14 +166,17 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
 
     }
 
+    /**
+     * Check if communicationInboundPortURI already exists in list of neighbours
+     *
+     * @param communicationInboundPortURI
+     * @return
+     */
     private boolean containsPortURI(String communicationInboundPortURI)
     {
-        Iterator<ConnectionInfo> iterator = this.neighbours.iterator();
-        ConnectionInfo next;
-        while(iterator.hasNext())
+        for(ConnectionInfo c: this.neighbours)
         {
-            next = iterator.next();
-            if(next.getCommunicationInboundPortURI() == communicationInboundPortURI)
+            if(c.getCommunicationInboundPortURI().equals(communicationInboundPortURI))
                 return true;
         }
         return false;
