@@ -17,19 +17,23 @@ public class CVM extends AbstractCVM {
         );
 
         AbstractComponent.createComponent(
-                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 0), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 0), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE, NodeType.INTERNAL}
         );
         
         AbstractComponent.createComponent(
-                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE, NodeType.INTERNAL}
         );
 
         AbstractComponent.createComponent(
-                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.TABLET, NodeType.INTERNAL}
         );
 
         AbstractComponent.createComponent(
-                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.SMARTPHONE}
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, NetworkNodeComponent.DeviceType.TABLET, NodeType.ACCESSPOINT}
+        );
+
+        AbstractComponent.createComponent(
+                NetworkNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 0), 5.0, NetworkNodeComponent.DeviceType.LAPTOP, NodeType.ACCESSPOINT}
         );
 
         super.deploy();

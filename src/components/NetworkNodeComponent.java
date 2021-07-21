@@ -25,6 +25,7 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
     protected PositionI initialPosition;
     protected double initialRange;
     protected DeviceType deviceType;
+    protected NodeType nodeType;
 
     protected Set<ConnectionInfo> neighbours = new HashSet<>();
 
@@ -32,15 +33,20 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
         SMARTPHONE, TABLET, LAPTOP, DESKTOP
     }
 
-    //String simulatorURI, PositionI position, double range, DeviceType type
-    protected NetworkNodeComponent(PositionI position, double range, DeviceType type) throws Exception {
+    protected NetworkNodeComponent(PositionI position, double range, DeviceType type, NodeType nodeType) throws Exception {
         super(1, 0);
         this.initialPosition = position;
         this.initialRange = range;
         this.deviceType = type;
+        this.nodeType = nodeType;
         this.initialize();
     }
 
+    /**
+     * Initialize the component
+     *
+     * @throws Exception
+     */
     protected void initialize() throws Exception
     {
         this.addr = new NetworkAddress(generateAddr());
@@ -54,6 +60,11 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
         this.toggleTracing();
     }
 
+    /**
+     * Generate a random address for the component
+     * 
+     * @return String
+     */
     private String generateAddr()
     {
         String s = "";
@@ -81,13 +92,24 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
             );
             
             //System.out.println("-- registrationInternal --");
-            this.neighbours = this.SimulatorPort.registrationInternal(
-            	this.addr,
-            	this.inboundPort.getPortURI(),
-            	this.initialPosition,
-            	this.initialRange,
-            	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
-            );
+            if(this.nodeType == NodeType.INTERNAL) {
+                this.neighbours = this.SimulatorPort.registrationInternal(
+                        this.addr,
+                        this.inboundPort.getPortURI(),
+                        this.initialPosition,
+                        this.initialRange,
+                        SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
+                );
+            }
+            else {
+                this.neighbours = this.SimulatorPort.registrationAccessPoint(
+                        this.addr,
+                        this.inboundPort.getPortURI(),
+                        this.initialPosition,
+                        this.initialRange,
+                        SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
+                );
+            }
 
             this.logMessage("Neighbours : " + this.neighbours.toString() +"\n");
 
@@ -186,7 +208,7 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
      * Check if communicationInboundPortURI already exists in list of neighbours
      *
      * @param communicationInboundPortURI
-     * @return
+     * @return boolean
      */
     private boolean containsPortURI(String communicationInboundPortURI)
     {
@@ -198,6 +220,12 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
         return false;
     }
 
+    /**
+     * Send m to all the neighbours of the component
+     *
+     * @param m
+     * @throws Exception
+     */
     private void sendMessageToNeighbours(MessageI m) throws Exception {
         for(ConnectionInfo neighbour: neighbours)
         {

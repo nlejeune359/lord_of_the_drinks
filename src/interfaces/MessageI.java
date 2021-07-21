@@ -6,22 +6,28 @@ import java.io.Serializable;
 
 public interface MessageI {
 	/**
-	 * @return retourne l’adresse du destinataire du message
+	 * get the address of the recipient in the message
+	 *
+	 * @return MessageI.address
 	 */
 	public AddressI getAddress();
 	
 	/**
-	 * @return retourne le contenu utile du message à récupérer par le destinataire
+	 * get the content of the message
+	 *
+	 * @return MessageI.message
 	 */
 	public Serializable getContent();
 	
 	/**
-	 * @return retourne vrai si le message doit encore être routé et faux sinon
+	 * Check if the message is still alive -> number of hops > 0
+	 *
+	 * @return boolean
 	 */
 	public boolean stillAlive();
 	
 	/**
-	 * décremente le nombre de saut encore autorisé dans le routage du message
+	 * decrement the number of hops of the message
 	 */
 	public void decrementHops();
 }

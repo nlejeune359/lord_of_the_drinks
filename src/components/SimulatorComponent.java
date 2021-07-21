@@ -12,7 +12,7 @@ import ports.SimulatorInboundPort;
 import interfaces.P2PAddressI;
 
 @OfferedInterfaces(offered = {RegistrationCI.class})
-public class SimulatorComponent extends AbstractComponent 
+public class SimulatorComponent extends AbstractComponent implements RegistrationCI
 {
 	protected SimulatorInboundPort inboundPort;
 	public static final String REGISTRATION_NODE_INBOUND_PORT_URI = "s-in-uri";
@@ -23,8 +23,9 @@ public class SimulatorComponent extends AbstractComponent
 		this.inboundPort = new SimulatorInboundPort(REGISTRATION_NODE_INBOUND_PORT_URI, this);
 		this.inboundPort.publishPort();
 	}
-	
-	public synchronized Set<ConnectionInfo> registerTerminalNode(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception
+
+	@Override
+	public synchronized Set<ConnectionInfo> registrationInternal(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception
 	{
 		SimulatorConnectionInfo ci = new SimulatorConnectionInfo(
 			address,
@@ -37,7 +38,8 @@ public class SimulatorComponent extends AbstractComponent
 		return this.getInRange(ci);
 	}
 
-	public synchronized Set<ConnectionInfo> registerAccessPoint(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception
+	@Override
+	public synchronized Set<ConnectionInfo> registrationAccessPoint(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception
 	{
 		SimulatorConnectionInfo ci = new SimulatorConnectionInfo(
 			address, 
@@ -66,7 +68,8 @@ public class SimulatorComponent extends AbstractComponent
 		node.add(ci);
 		return res;
 	}
-	
+
+	@Override
 	public synchronized void unregister(P2PAddressI address) throws Exception
 	{
 		for(SimulatorConnectionInfo c : this.node)

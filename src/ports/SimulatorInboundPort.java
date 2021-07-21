@@ -28,14 +28,14 @@ public class SimulatorInboundPort extends AbstractInboundPort implements Registr
 	@Override
 	public Set<ConnectionInfo> registrationInternal(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception {
 		return this.getOwner().handleRequest(c -> {
-			return ((SimulatorComponent) c).registerTerminalNode(address, communicationInboundPort, initialPosition, initialRange, routingInboundPortURI );
+			return ((SimulatorComponent) c).registrationInternal(address, communicationInboundPort, initialPosition, initialRange, routingInboundPortURI );
 		});
 	}
 
 	@Override
 	public Set<ConnectionInfo> registrationAccessPoint(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception {
 		return this.getOwner().handleRequest(c -> {
-			return ((SimulatorComponent) c).registerAccessPoint(address, communicationInboundPort, initialPosition, initialRange, routingInboundPortURI);
+			return ((SimulatorComponent) c).registrationAccessPoint(address, communicationInboundPort, initialPosition, initialRange, routingInboundPortURI);
 		});
 	}
 	

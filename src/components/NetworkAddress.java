@@ -21,7 +21,12 @@ public class NetworkAddress implements P2PAddressI {
 		if(!this.addr.equals(address.addr)) return false;
 		return true;
 	}
-	
+
+	/**
+	 * Return the address of NetworkAddress
+	 *
+	 * @return NetworkAddress.addr
+	 */
 	public String getAddr() {
 		return addr;
 	}
