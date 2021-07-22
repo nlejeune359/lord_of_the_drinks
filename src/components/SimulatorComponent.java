@@ -32,8 +32,7 @@ public class SimulatorComponent extends AbstractComponent implements Registratio
 			communicationInboundPort, 
 			routingInboundPortURI, 
 			initialPosition,
-			initialRange,
-			NodeType.INTERNAL
+			initialRange
 		);
 		return this.getInRange(ci);
 	}
@@ -46,8 +45,7 @@ public class SimulatorComponent extends AbstractComponent implements Registratio
 			communicationInboundPort, 
 			routingInboundPortURI, 
 			initialPosition,
-			initialRange,
-			NodeType.ACCESSPOINT
+			initialRange
 		);		
 		return this.getInRange(ci);
 	}

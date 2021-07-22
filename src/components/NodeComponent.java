@@ -2,10 +2,11 @@ package components;
 
 import connectors.NetworkNodeConnector;
 import fr.sorbonne_u.components.AbstractComponent;
-import fr.sorbonne_u.components.annotations.RequiredInterfaces;
 import fr.sorbonne_u.components.exceptions.ComponentShutdownException;
-import fr.sorbonne_u.components.exceptions.ComponentStartException;
-import interfaces.*;
+import interfaces.MessageI;
+import interfaces.NetworkNodeServicesCI;
+import interfaces.P2PAddressI;
+import interfaces.PositionI;
 import ports.NetworkNodeInboundPort;
 import ports.NetworkNodeOutboundPort;
 
@@ -14,18 +15,16 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
-@RequiredInterfaces(required = {NetworkNodeServicesCI.class})
-public class NetworkNodeComponent extends AbstractComponent implements NetworkNodeServicesCI {
+public class NodeComponent extends AbstractComponent implements NetworkNodeServicesCI {
 
     protected P2PAddressI addr;
-    protected NetworkNodeOutboundPort SimulatorPort;
+    protected NetworkNodeOutboundPort simulatorPort;
     protected NetworkNodeInboundPort inboundPort;
     protected Map<String, NetworkNodeOutboundPort> outboundPorts = new HashMap<String, NetworkNodeOutboundPort>();
     protected String SIMULATOR_URI;
     protected PositionI initialPosition;
     protected double initialRange;
     protected DeviceType deviceType;
-    protected NodeType nodeType;
 
     protected Set<ConnectionInfo> neighbours = new HashSet<>();
 
@@ -33,12 +32,23 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
         SMARTPHONE, TABLET, LAPTOP, DESKTOP
     }
 
-    protected NetworkNodeComponent(PositionI position, double range, DeviceType type, NodeType nodeType) throws Exception {
+    protected NodeComponent(PositionI position, double range, DeviceType type) throws Exception {
         super(1, 0);
         this.initialPosition = position;
         this.initialRange = range;
         this.deviceType = type;
-        this.nodeType = nodeType;
+        this.addr = new NetworkAddress(generateAddr());
+        this.inboundPort = new NetworkNodeInboundPort(this);
+        this.initialize();
+    }
+
+    protected NodeComponent(String address, String inboundPortURI, PositionI position, double range, DeviceType type) throws Exception {
+        super(1, 0);
+        this.initialPosition = position;
+        this.initialRange = range;
+        this.deviceType = type;
+        this.addr = new NetworkAddress(address);
+        this.inboundPort = new NetworkNodeInboundPort(inboundPortURI, this);
         this.initialize();
     }
 
@@ -49,11 +59,9 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
      */
     protected void initialize() throws Exception
     {
-        this.addr = new NetworkAddress(generateAddr());
-        this.inboundPort = new NetworkNodeInboundPort(this);
         this.inboundPort.publishPort();
-        this.SimulatorPort = new NetworkNodeOutboundPort(this);
-        this.SimulatorPort.publishPort();
+        this.simulatorPort = new NetworkNodeOutboundPort(this);
+        this.simulatorPort.publishPort();
 
         //System.out.println("address : " + this.addr + " inboundPort: " +this.inboundPort.getPortURI() + " outboundPort: " +this.SimulatorPort.getPortURI());
         this.toggleLogging();
@@ -62,10 +70,10 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
 
     /**
      * Generate a random address for the component
-     * 
+     *
      * @return String
      */
-    private String generateAddr()
+    public static String generateAddr()
     {
         String s = "";
         double d;
@@ -81,54 +89,15 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
     }
 
     @Override
-    public synchronized void start() throws ComponentStartException
+    public synchronized void shutdown() throws ComponentShutdownException
     {
         try {
-        	//System.out.println("-- do port connection --");
-            this.doPortConnection(
-            	this.SimulatorPort.getPortURI(),
-            	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI, 
-           		NetworkNodeConnector.class.getCanonicalName()
-            );
-            
-            //System.out.println("-- registrationInternal --");
-            if(this.nodeType == NodeType.INTERNAL) {
-                this.neighbours = this.SimulatorPort.registrationInternal(
-                        this.addr,
-                        this.inboundPort.getPortURI(),
-                        this.initialPosition,
-                        this.initialRange,
-                        SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
-                );
-            }
-            else {
-                this.neighbours = this.SimulatorPort.registrationAccessPoint(
-                        this.addr,
-                        this.inboundPort.getPortURI(),
-                        this.initialPosition,
-                        this.initialRange,
-                        SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI
-                );
-            }
-
-            this.logMessage("Neighbours : " + this.neighbours.toString() +"\n");
-
-            for(ConnectionInfo c: this.neighbours)
-            {
-                NetworkNodeOutboundPort outboundPort = new NetworkNodeOutboundPort(this);
-                this.outboundPorts.put(c.getCommunicationInboundPortURI(), outboundPort);
-                this.doPortConnection(
-                        this.outboundPorts.get(c.getCommunicationInboundPortURI()).getPortURI(),
-                        c.getCommunicationInboundPortURI(),
-                        NetworkNodeConnector.class.getCanonicalName()
-                );
-                // System.out.println("Port Connected");
-                this.outboundPorts.get(c.getCommunicationInboundPortURI()).connect(this.addr, this.inboundPort.getPortURI(), this.outboundPorts.get(c.getCommunicationInboundPortURI()).getPortURI());
-            }
-        } catch(Exception e) {
-            throw new ComponentStartException(e);
+            this.inboundPort.unpublishPort();
+            this.simulatorPort.unpublishPort();
+        } catch(Exception e)
+        {
+            throw new ComponentShutdownException(e);
         }
-        super.start();
     }
 
     @Override
@@ -137,18 +106,6 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
         Message m = new Message(((ConnectionInfo)this.neighbours.toArray()[0]).getAddress(), "Message", 5);
 
         this.sendMessageToNeighbours(m);
-    }
-
-    @Override
-    public synchronized void shutdown() throws ComponentShutdownException
-    {
-        try {
-            this.inboundPort.unpublishPort();
-            this.SimulatorPort.unpublishPort();
-        } catch(Exception e)
-        {
-            throw new ComponentShutdownException(e);
-        }
     }
 
     @Override
@@ -179,7 +136,7 @@ public class NetworkNodeComponent extends AbstractComponent implements NetworkNo
                     communicationInboundPortURI,
                     NetworkNodeConnector.class.getCanonicalName()
             );
-            this.outboundPorts.get(communicationInboundPortURI).connect(this.addr, this.inboundPort.getPortURI(), communicationInboundPortURI);
+            //this.outboundPorts.get(communicationInboundPortURI).connect(this.addr, this.inboundPort.getPortURI(), communicationInboundPortURI);
         }
     }
 

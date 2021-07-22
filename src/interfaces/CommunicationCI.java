@@ -6,7 +6,7 @@ import fr.sorbonne_u.components.interfaces.RequiredCI;
 public interface CommunicationCI extends RequiredCI, OfferedCI{
 
 	/**
-	 * Received a connect request of another component
+	 * Connect to another component
 	 *
 	 * @param address
 	 * @param communicationInboundPortURI
@@ -20,7 +20,7 @@ public interface CommunicationCI extends RequiredCI, OfferedCI{
 	) throws Exception;
 
 	/**
-	 * Called when m is received
+	 * Send message m
 	 * @param m
 	 * @throws Exception
 	 */

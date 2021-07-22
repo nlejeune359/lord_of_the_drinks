@@ -8,7 +8,7 @@ import interfaces.*;
 
 import java.util.Set;
 
-public class NetworkNodeOutboundPort extends AbstractOutboundPort implements NetworkNodeServicesCI, RegistrationCI {
+public class NetworkNodeOutboundPort extends AbstractOutboundPort implements NetworkNodeServicesCI, RegistrationCI, ExternalCommunicationCI {
 
     public NetworkNodeOutboundPort(ComponentI owner) throws Exception
     {
@@ -43,5 +43,15 @@ public class NetworkNodeOutboundPort extends AbstractOutboundPort implements Net
     @Override
     public void ping() throws Exception {
         ((CommunicationCI)this.getConnector()).ping();
+    }
+
+    @Override
+    public void routeExternalMessage(MessageI m) throws Exception {
+        ((ExternalCommunicationCI)this.getConnector()).routeExternalMessage(m);
+    }
+
+    @Override
+    public void connectExternal(AddressI address, String communicationInboundPortURI) throws Exception {
+        ((ExternalCommunicationCI)this.getConnector()).connectExternal(address, communicationInboundPortURI);
     }
 }

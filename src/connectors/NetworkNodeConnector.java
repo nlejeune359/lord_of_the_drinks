@@ -6,7 +6,7 @@ import interfaces.*;
 
 import java.util.Set;
 
-public class NetworkNodeConnector extends AbstractConnector implements NetworkNodeServicesCI, RegistrationCI {
+public class NetworkNodeConnector extends AbstractConnector implements NetworkNodeServicesCI, RegistrationCI , ExternalCommunicationCI{
     @Override
     public Set<ConnectionInfo> registrationInternal(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception {
         return ((RegistrationCI)this.offering).registrationInternal(address, communicationInboundPort, initialPosition, initialRange, routingInboundPortURI);
@@ -34,6 +34,16 @@ public class NetworkNodeConnector extends AbstractConnector implements NetworkNo
 
     @Override
     public void ping() {
+
+    }
+
+    @Override
+    public void routeExternalMessage(MessageI m) throws Exception {
+
+    }
+
+    @Override
+    public void connectExternal(AddressI address, String communicationInboundPortURI) throws Exception {
 
     }
 }
