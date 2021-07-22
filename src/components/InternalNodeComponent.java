@@ -27,14 +27,14 @@ public class InternalNodeComponent extends NodeComponent {
     public synchronized void start() throws ComponentStartException
     {
         try {
-        	//System.out.println("-- do port connection --");
+        	// connexion au simulateur
             this.doPortConnection(
             	this.simulatorPort.getPortURI(),
             	SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI, 
            		NetworkNodeConnector.class.getCanonicalName()
             );
             
-            //System.out.println("-- registrationInternal --");
+            // recupere les voisins du composant
             this.neighbours = this.simulatorPort.registrationInternal(
                     this.addr,
                     this.inboundPort.getPortURI(),
@@ -45,6 +45,7 @@ public class InternalNodeComponent extends NodeComponent {
 
             this.logMessage("Neighbours : " + this.neighbours.toString() +"\n");
 
+            // on cree une connexion entre tous les voisins
             for(ConnectionInfo c: this.neighbours)
             {
                 NetworkNodeOutboundPort outboundPort = new NetworkNodeOutboundPort(this);
@@ -54,7 +55,6 @@ public class InternalNodeComponent extends NodeComponent {
                         c.getCommunicationInboundPortURI(),
                         NetworkNodeConnector.class.getCanonicalName()
                 );
-                // System.out.println("Port Connected");
                 this.outboundPorts.get(c.getCommunicationInboundPortURI()).connect(this.addr, this.inboundPort.getPortURI(), this.outboundPorts.get(c.getCommunicationInboundPortURI()).getPortURI());
             }
         } catch(Exception e) {

@@ -31,11 +31,13 @@ public class ExternalElementComponent extends AbstractComponent implements Exter
     @Override
     public synchronized void start() {
         try {
+        	// connexion au point d'acces
             this.doPortConnection(
                     this.outboundPort.getPortURI(),
                     this.accesPointInboundPortURI,
                     ExternalElementConnector.class.getCanonicalName()
             );
+            
             this.outboundPort.connectExternal(this.addr, this.inboundPort.getPortURI());
         } catch (Exception e) {
             e.printStackTrace();

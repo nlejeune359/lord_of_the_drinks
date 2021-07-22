@@ -24,6 +24,7 @@ public class SimulatorComponent extends AbstractComponent implements Registratio
 		this.inboundPort.publishPort();
 	}
 
+	
 	@Override
 	public synchronized Set<ConnectionInfo> registrationInternal(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception
 	{
@@ -50,6 +51,12 @@ public class SimulatorComponent extends AbstractComponent implements Registratio
 		return this.getInRange(ci);
 	}
 	
+	/**
+	 * @param ci
+	 * @return liste voisins a portee de ci
+	 * 
+	 * @throws Exception
+	 */
 	private synchronized Set<ConnectionInfo> getInRange(SimulatorConnectionInfo ci) throws Exception {
 		Set<ConnectionInfo> res = new HashSet<ConnectionInfo>();
 		for(SimulatorConnectionInfo c : this.node)

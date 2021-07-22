@@ -27,14 +27,14 @@ public class AccessPointComponent extends NodeComponent implements ExternalCommu
     public synchronized void start() throws ComponentStartException
     {
         try {
-            //System.out.println("-- do port connection --");
+            // connexion au simulateur
             this.doPortConnection(
                     this.simulatorPort.getPortURI(),
                     SimulatorComponent.REGISTRATION_NODE_INBOUND_PORT_URI,
                     NetworkNodeConnector.class.getCanonicalName()
             );
 
-            //System.out.println("-- registrationInternal --");
+            // recupere les voisins du composant
             this.neighbours = this.simulatorPort.registrationInternal(
                     this.addr,
                     this.inboundPort.getPortURI(),
@@ -45,6 +45,7 @@ public class AccessPointComponent extends NodeComponent implements ExternalCommu
 
             this.logMessage("Neighbours : " + this.neighbours.toString() +"\n");
 
+            // on cree une connexion entre tous les voisins
             for(ConnectionInfo c: this.neighbours)
             {
                 NetworkNodeOutboundPort outboundPort = new NetworkNodeOutboundPort(this);
@@ -54,7 +55,6 @@ public class AccessPointComponent extends NodeComponent implements ExternalCommu
                         c.getCommunicationInboundPortURI(),
                         NetworkNodeConnector.class.getCanonicalName()
                 );
-                // System.out.println("Port Connected");
                 this.outboundPorts.get(c.getCommunicationInboundPortURI()).connect(this.addr, this.inboundPort.getPortURI(), this.outboundPorts.get(c.getCommunicationInboundPortURI()).getPortURI());
             }
         } catch(Exception e) {
@@ -70,10 +70,12 @@ public class AccessPointComponent extends NodeComponent implements ExternalCommu
 
     @Override
     public void connectExternal(AddressI address, String communicationInboundPortURI) throws Exception {
+    	// verification de l'adresse
         if(!address.isIPAddress()){
             throw new Exception();
         }
 
+        // connexion a l'element externe 
         ExternalConnectionInfo externalElement = new ExternalConnectionInfo((IPAddressI) address, communicationInboundPortURI);
         NetworkNodeOutboundPort outboundPort = new NetworkNodeOutboundPort(this);
         this.doPortConnection(
@@ -81,6 +83,8 @@ public class AccessPointComponent extends NodeComponent implements ExternalCommu
                 externalElement.getCommunicationInboundPortURI(),
                 NetworkNodeConnector.class.getCanonicalName()
         );
+        
+        // Ajout du nouveau port dans la liste des ports destines aux elements externes au reseau 
         this.externalPorts.put(externalElement, outboundPort);
 
         logMessage("New external element added");

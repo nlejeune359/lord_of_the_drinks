@@ -5,10 +5,6 @@ import interfaces.P2PAddressI;
 
 public class ExternalConnectionInfo {
 
-    /**
-     * @return l’adresse du voisin
-     */
-
     private IPAddressI address;
     private String communicationInboundPortURI;
 
@@ -17,6 +13,9 @@ public class ExternalConnectionInfo {
         this.communicationInboundPortURI = communicationInboundPortURI;
     }
 
+    /**
+     * @return l’adresse du composant
+     */
     public IPAddressI getAddress() {
         return this.address;
     }

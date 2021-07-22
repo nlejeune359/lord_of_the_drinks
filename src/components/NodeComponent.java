@@ -28,10 +28,18 @@ public class NodeComponent extends AbstractComponent implements NetworkNodeServi
 
     protected Set<ConnectionInfo> neighbours = new HashSet<>();
 
+    // different type de periferique
     public enum DeviceType {
         SMARTPHONE, TABLET, LAPTOP, DESKTOP
     }
 
+    /**
+     * cree un point acces classique
+     * @param position
+     * @param range
+     * @param type
+     * @throws Exception
+     */
     protected NodeComponent(PositionI position, double range, DeviceType type) throws Exception {
         super(1, 0);
         this.initialPosition = position;
@@ -42,6 +50,15 @@ public class NodeComponent extends AbstractComponent implements NetworkNodeServi
         this.initialize();
     }
 
+    /**
+     * cree un point d'acces avec addresse et uri du port entrant
+     * @param address
+     * @param inboundPortURI
+     * @param position
+     * @param range
+     * @param type
+     * @throws Exception
+     */
     protected NodeComponent(String address, String inboundPortURI, PositionI position, double range, DeviceType type) throws Exception {
         super(1, 0);
         this.initialPosition = position;
@@ -52,18 +69,11 @@ public class NodeComponent extends AbstractComponent implements NetworkNodeServi
         this.initialize();
     }
 
-    /**
-     * Initialize the component
-     *
-     * @throws Exception
-     */
     protected void initialize() throws Exception
     {
         this.inboundPort.publishPort();
         this.simulatorPort = new NetworkNodeOutboundPort(this);
         this.simulatorPort.publishPort();
-
-        //System.out.println("address : " + this.addr + " inboundPort: " +this.inboundPort.getPortURI() + " outboundPort: " +this.SimulatorPort.getPortURI());
         this.toggleLogging();
         this.toggleTracing();
     }
@@ -103,47 +113,43 @@ public class NodeComponent extends AbstractComponent implements NetworkNodeServi
     @Override
     public synchronized void execute() throws Exception
     {
+    	// envois un message au premier voisin
         Message m = new Message(((ConnectionInfo)this.neighbours.toArray()[0]).getAddress(), "Message", 5);
-
         this.sendMessageToNeighbours(m);
     }
 
     @Override
     public void connect(P2PAddressI address, String communicationInboundPortURI, String routingInboundPortURI) throws Exception {
-
-        // System.out.println("address: " + address + " communicationInboudPortURI: " + communicationInboundPortURI + " routingInboundPortURI: " + routingInboundPortURI);
-
+    	// si ce n'est pas un voisin
         if(!containsPortURI(communicationInboundPortURI))
         {
+        	// on l'ajoute dans la liste des voisins
             ConnectionInfo newNeighbour = new ConnectionInfo(
                     address,
                     communicationInboundPortURI,
                     routingInboundPortURI
             );
             this.neighbours.add(newNeighbour);
-
             this.logMessage("Neighbours : " + this.neighbours.toString() +"\n");
 
+            // on lui cree un port
             NetworkNodeOutboundPort outboundPort = new NetworkNodeOutboundPort(this);
             this.outboundPorts.put(communicationInboundPortURI, outboundPort);
 
-            /*System.out.println(this.outboundPorts.get(communicationInboundPortURI).getPortURI());
-            System.out.println(this.isPortConnected(this.outboundPorts.get(communicationInboundPortURI).getPortURI()));
-            System.out.println(communicationInboundPortURI);*/
-
+            // on connecte le port au voisin
             this.doPortConnection(
                     this.outboundPorts.get(communicationInboundPortURI).getPortURI(),
                     communicationInboundPortURI,
                     NetworkNodeConnector.class.getCanonicalName()
             );
-            //this.outboundPorts.get(communicationInboundPortURI).connect(this.addr, this.inboundPort.getPortURI(), communicationInboundPortURI);
         }
     }
 
     @Override
     public void routeMessage(MessageI m) throws Exception {
+    	// Si le message nous est destine alors on l'affiche sinon on le renvois aux voisins
         if(m.getAddress().equals(this.addr)) {
-            this.logMessage("Message received : " +m.getContent() + "\n");
+            this.logMessage("Message received : " + m.getContent() + "\n");
         }
         else {
             m.decrementHops();
@@ -162,7 +168,7 @@ public class NodeComponent extends AbstractComponent implements NetworkNodeServi
     }
 
     /**
-     * Check if communicationInboundPortURI already exists in list of neighbours
+     * verifie si communicationInboundPortURI existe dans la liste des neighbours
      *
      * @param communicationInboundPortURI
      * @return boolean
@@ -178,7 +184,7 @@ public class NodeComponent extends AbstractComponent implements NetworkNodeServi
     }
 
     /**
-     * Send m to all the neighbours of the component
+     * envois le message à tous les voisins
      *
      * @param m
      * @throws Exception

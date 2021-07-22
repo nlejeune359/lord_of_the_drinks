@@ -16,7 +16,7 @@ public class Message implements MessageI{
 		this.message = message;
 		this.hops = hops;
 	}
-
+	
 	@Override
 	public AddressI getAddress() {
 		return this.address;

@@ -16,40 +16,41 @@ public class CVM extends AbstractCVM {
      */
     @Override
     public void deploy() throws Exception {
-        ////////////////////////////////////////
+    	
+    	// Creation du reseau
+    	
         AbstractComponent.createComponent(
-                SimulatorComponent.class.getCanonicalName(), new Object[]{}
+            SimulatorComponent.class.getCanonicalName(), new Object[]{}
         );
 
         AbstractComponent.createComponent(
-                InternalNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 0), 5.0, InternalNodeComponent.DeviceType.SMARTPHONE}
+            InternalNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 0), 5.0, InternalNodeComponent.DeviceType.SMARTPHONE}
         );
         
         AbstractComponent.createComponent(
-                InternalNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, InternalNodeComponent.DeviceType.SMARTPHONE}
+            InternalNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, InternalNodeComponent.DeviceType.SMARTPHONE}
         );
 
         AbstractComponent.createComponent(
-                InternalNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, InternalNodeComponent.DeviceType.TABLET}
+            InternalNodeComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, InternalNodeComponent.DeviceType.TABLET}
         );
 
         AbstractComponent.createComponent(
                 AccessPointComponent.class.getCanonicalName(), new Object[]{new NodePosition(0, 1), 5.0, InternalNodeComponent.DeviceType.TABLET}
         );
-        ////////////////////////////////////////
 
         AbstractComponent.createComponent(
-                AccessPointComponent.class.getCanonicalName(), new Object[]{
-                        "access-point",
-                        "ap-ip",
-                        new NodePosition(0, 0),
-                        5.0,
-                        InternalNodeComponent.DeviceType.LAPTOP
-                }
+            AccessPointComponent.class.getCanonicalName(), new Object[]{
+                "access-point",
+                "ap-ip",
+                new NodePosition(0, 0),
+                5.0,
+                InternalNodeComponent.DeviceType.LAPTOP
+            }
         );
 
         AbstractComponent.createComponent(
-                ExternalElementComponent.class.getCanonicalName(), new Object[]{"external-element", "e-ip", "access-point", "ap-ip"}
+            ExternalElementComponent.class.getCanonicalName(), new Object[]{"external-element", "e-ip", "access-point", "ap-ip"}
         );
 
         super.deploy();
