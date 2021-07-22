@@ -38,18 +38,6 @@ public class CVM extends AbstractCVM {
         );
         ////////////////////////////////////////
 
-        Set<ExternalConnectionInfo> externalElements = new HashSet<>();
-        externalElements.add(
-                new ExternalConnectionInfo(
-                        new ExternalNetworkAddress("external-element"),
-                        "e-ip"
-                )
-        );
-
-        AbstractComponent.createComponent(
-                ExternalElementComponent.class.getCanonicalName(), new Object[]{"external-element", "e-ip", "access-point", "ap-ip"}
-        );
-
         AbstractComponent.createComponent(
                 AccessPointComponent.class.getCanonicalName(), new Object[]{
                         "access-point",
@@ -60,7 +48,9 @@ public class CVM extends AbstractCVM {
                 }
         );
 
-
+        AbstractComponent.createComponent(
+                ExternalElementComponent.class.getCanonicalName(), new Object[]{"external-element", "e-ip", "access-point", "ap-ip"}
+        );
 
         super.deploy();
     }
@@ -69,7 +59,7 @@ public class CVM extends AbstractCVM {
         try {
             CVM cvm = new CVM();
             cvm.startStandardLifeCycle(1000L);
-            Thread.sleep(100000L);
+            Thread.sleep(10000L);
             System.exit(0);
         } catch (Exception e) {
             throw new RuntimeException(e);
