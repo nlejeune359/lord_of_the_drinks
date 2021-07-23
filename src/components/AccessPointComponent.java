@@ -38,7 +38,7 @@ public class AccessPointComponent extends NodeComponent implements ExternalCommu
             );
 
             // recupere les voisins du composant
-            this.neighbours = this.simulatorPort.registrationInternal(
+            this.neighbours = this.simulatorPort.registrationAccessPoint(
                     this.addr,
                     this.inboundPort.getPortURI(),
                     this.initialPosition,
