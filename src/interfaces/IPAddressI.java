@@ -1,5 +1,8 @@
 package interfaces;
 
+/**
+ * Adresse d un element externe au reseau pair a pair
+ */
 public interface IPAddressI extends AddressI {
 
 	/**

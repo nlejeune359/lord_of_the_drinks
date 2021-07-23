@@ -7,6 +7,9 @@ import fr.sorbonne_u.components.interfaces.OfferedCI;
 import fr.sorbonne_u.components.ports.AbstractInboundPort;
 import interfaces.*;
 
+/**
+ * Port entrant d un element externe au reseau pair a pair
+ */
 public class ExternalElementInboundPort extends AbstractInboundPort implements ExternalCommunicationCI {
     public ExternalElementInboundPort(String uri, ComponentI owner) throws Exception {
         super(uri, ExternalElementConnector.class, owner);

@@ -6,6 +6,9 @@ import components.RouteInfo;
 import fr.sorbonne_u.components.interfaces.OfferedCI;
 import fr.sorbonne_u.components.interfaces.RequiredCI;
 
+/**
+ * Pour le routage au sein du reseau pair a pair
+ */
 public interface RoutingManagementCI extends RequiredCI, OfferedCI {
 
 	/**

@@ -2,6 +2,9 @@ package components;
 
 import interfaces.PositionI;
 
+/**
+ * Position d un element au sein du reseau pair a pair
+ */
 public class NodePosition implements PositionI {
     public double x;
     public double y;

@@ -4,6 +4,9 @@ import interfaces.AddressI;
 
 import java.io.Serializable;
 
+/**
+ * Interface liee aux messages
+ */
 public interface MessageI {
 	/**
 	 * get the address of the recipient in the message

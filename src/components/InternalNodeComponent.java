@@ -14,6 +14,9 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Composant representant un noeud interne au reseau pair a pair
+ */
 @RequiredInterfaces(required = {NetworkNodeServicesCI.class})
 public class InternalNodeComponent extends NodeComponent {
 

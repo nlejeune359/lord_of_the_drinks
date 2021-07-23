@@ -6,6 +6,9 @@ import interfaces.IPAddressI;
 import java.util.HashSet;
 import java.util.Set;
 
+/**
+ * Lance la simulation du reseau pair a pair
+ */
 public class CVM extends AbstractCVM {
 
     public CVM() throws Exception {

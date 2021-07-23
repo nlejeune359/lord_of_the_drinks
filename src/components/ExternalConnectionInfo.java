@@ -3,6 +3,9 @@ package components;
 import interfaces.IPAddressI;
 import interfaces.P2PAddressI;
 
+/**
+ * Informations de connexion d un element externe au reseau pair a pair
+ */
 public class ExternalConnectionInfo {
 
     private IPAddressI address;

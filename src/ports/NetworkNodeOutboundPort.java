@@ -8,6 +8,9 @@ import interfaces.*;
 
 import java.util.Set;
 
+/**
+ * Port sortant d un element du reseau pair a pair
+ */
 public class NetworkNodeOutboundPort extends AbstractOutboundPort implements NetworkNodeServicesCI, RegistrationCI, ExternalCommunicationCI {
 
     public NetworkNodeOutboundPort(ComponentI owner) throws Exception

@@ -7,6 +7,9 @@ import interfaces.ExternalCommunicationCI;
 import interfaces.IPAddressI;
 import interfaces.MessageI;
 
+/**
+ * Connecteur d un element externe du reseau pair a pair
+ */
 public class ExternalElementConnector extends AbstractConnector implements ExternalCommunicationCI {
     @Override
     public void routeExternalMessage(MessageI m) throws Exception {

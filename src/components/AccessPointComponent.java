@@ -11,6 +11,9 @@ import ports.NetworkNodeOutboundPort;
 import java.util.HashMap;
 import java.util.Map;
 
+/**
+ * Composant representant un point d access du reseau pair a pair
+ */
 public class AccessPointComponent extends NodeComponent implements ExternalCommunicationCI {
 
     protected Map<ExternalConnectionInfo, NetworkNodeOutboundPort> externalPorts = new HashMap<ExternalConnectionInfo, NetworkNodeOutboundPort>();

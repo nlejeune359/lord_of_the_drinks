@@ -7,6 +7,9 @@ import fr.sorbonne_u.components.ComponentI;
 import fr.sorbonne_u.components.ports.AbstractInboundPort;
 import interfaces.*;
 
+/**
+ * Port entrant d un element du reseau pair a pair
+ */
 public class NetworkNodeInboundPort extends AbstractInboundPort implements NetworkNodeServicesCI, ExternalCommunicationCI {
 
     public NetworkNodeInboundPort(ComponentI owner) throws Exception

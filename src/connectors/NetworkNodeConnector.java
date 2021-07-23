@@ -6,6 +6,9 @@ import interfaces.*;
 
 import java.util.Set;
 
+/**
+ * Connecteur d un element interne au reseau pair a pair
+ */
 public class NetworkNodeConnector extends AbstractConnector implements NetworkNodeServicesCI, RegistrationCI , ExternalCommunicationCI{
     @Override
     public Set<ConnectionInfo> registrationInternal(P2PAddressI address, String communicationInboundPort, PositionI initialPosition, double initialRange, String routingInboundPortURI) throws Exception {

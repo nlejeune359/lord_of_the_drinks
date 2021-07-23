@@ -11,6 +11,10 @@ import interfaces.RegistrationCI;
 import ports.SimulatorInboundPort;
 import interfaces.P2PAddressI;
 
+/**
+ * Simulateur du reseau pair a pair
+ * Enregistre tous les noeuds du reseau et leur indique leur liste de voisins
+ */
 @OfferedInterfaces(offered = {RegistrationCI.class})
 public class SimulatorComponent extends AbstractComponent implements RegistrationCI
 {
@@ -33,9 +37,10 @@ public class SimulatorComponent extends AbstractComponent implements Registratio
 			communicationInboundPort, 
 			routingInboundPortURI, 
 			initialPosition,
-			initialRange
+			initialRange,
+			SimulatorConnectionInfo.NodeType.INTERNAL
 		);
-		return this.getInRange(ci);
+		return this.getNeighbours(ci);
 	}
 
 	@Override
@@ -46,9 +51,10 @@ public class SimulatorComponent extends AbstractComponent implements Registratio
 			communicationInboundPort, 
 			routingInboundPortURI, 
 			initialPosition,
-			initialRange
+			initialRange,
+			SimulatorConnectionInfo.NodeType.ACCESS_POINT
 		);		
-		return this.getInRange(ci);
+		return this.getNeighbours(ci);
 	}
 	
 	/**
@@ -57,11 +63,11 @@ public class SimulatorComponent extends AbstractComponent implements Registratio
 	 * 
 	 * @throws Exception
 	 */
-	private synchronized Set<ConnectionInfo> getInRange(SimulatorConnectionInfo ci) throws Exception {
+	private synchronized Set<ConnectionInfo> getNeighbours(SimulatorConnectionInfo ci) throws Exception {
 		Set<ConnectionInfo> res = new HashSet<ConnectionInfo>();
 		for(SimulatorConnectionInfo c : this.node)
 		{
-			if(ci.getInitialPosition().distance(c.getInitialPosition()) <= ci.getInitialRange()) {
+			if(c.getNodeType() == SimulatorConnectionInfo.NodeType.ACCESS_POINT || ci.getInitialPosition().distance(c.getInitialPosition()) <= ci.getInitialRange()) {
 				ConnectionInfo connInf = new ConnectionInfo(
 						c.getAddress(),
 						c.getCommunicationInboundPortURI(),

@@ -1,5 +1,8 @@
 package interfaces;
 
+/**
+ * Adresse des elements du reseau (interne ou externe)
+ */
 public interface AddressI {
 
 	/**

@@ -5,6 +5,9 @@ import java.io.Serializable;
 import interfaces.AddressI;
 import interfaces.MessageI;
 
+/**
+ * Objet representant un message destinant a etre envoye au sein du reseau pair a pair
+ */
 public class Message implements MessageI{
 	
 	private AddressI address;

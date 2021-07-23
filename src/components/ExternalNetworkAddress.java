@@ -3,6 +3,9 @@ package components;
 import interfaces.AddressI;
 import interfaces.IPAddressI;
 
+/**
+ * Objet representant l adresse d un element externe au reseau pair a pair
+ */
 public class ExternalNetworkAddress implements IPAddressI {
 
     private String addr;

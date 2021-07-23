@@ -1,5 +1,8 @@
 package interfaces;
 
+/**
+ * Adresse d un element du reseau pair a pair (point d acces ou noeud interne)
+ */
 public interface P2PAddressI extends AddressI {
 	
 	@Override

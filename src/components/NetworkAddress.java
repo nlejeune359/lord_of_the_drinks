@@ -3,6 +3,9 @@ package components;
 import interfaces.AddressI;
 import interfaces.P2PAddressI;
 
+/**
+ * Objet representant l adresse d un element interne au reseau pair a pair
+ */
 public class NetworkAddress implements P2PAddressI {
 	
 	private static final long serialVersionUID = 1L;

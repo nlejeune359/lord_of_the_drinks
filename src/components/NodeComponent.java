@@ -15,6 +15,10 @@ import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 
+/**
+ * Composant representant un element du reseau pair a pair
+ * Les points d acces et les elements internes etendent ce composant
+ */
 public class NodeComponent extends AbstractComponent implements NetworkNodeServicesCI {
 
     protected P2PAddressI addr;
@@ -28,7 +32,9 @@ public class NodeComponent extends AbstractComponent implements NetworkNodeServi
 
     protected Set<ConnectionInfo> neighbours = new HashSet<>();
 
-    // different type de periferique
+    /**
+     * Differents types de peripheriques connectes au reseau
+     */
     public enum DeviceType {
         SMARTPHONE, TABLET, LAPTOP, DESKTOP
     }

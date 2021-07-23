@@ -8,6 +8,9 @@ import interfaces.P2PAddressI;
 import interfaces.PositionI;
 import interfaces.RegistrationCI;
 
+/**
+ * Connecteur du simulateur
+ */
 public class SimulatorConnector extends AbstractConnector implements RegistrationCI {
 
 	@Override

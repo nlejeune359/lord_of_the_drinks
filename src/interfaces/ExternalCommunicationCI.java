@@ -3,6 +3,9 @@ package interfaces;
 import fr.sorbonne_u.components.interfaces.OfferedCI;
 import fr.sorbonne_u.components.interfaces.RequiredCI;
 
+/**
+ * Interface de communication entre points d acces et elements externes au reseau pair a pair
+ */
 public interface ExternalCommunicationCI extends RequiredCI, OfferedCI {
 
 	/**

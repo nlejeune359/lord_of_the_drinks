@@ -9,6 +9,9 @@ import ports.ExternalElementOutboundPort;
 import ports.NetworkNodeInboundPort;
 import ports.NetworkNodeOutboundPort;
 
+/**
+ * Composant representant un element externe au reseau pair a pair
+ */
 public class ExternalElementComponent extends AbstractComponent implements ExternalCommunicationCI {
 
     protected IPAddressI addr;

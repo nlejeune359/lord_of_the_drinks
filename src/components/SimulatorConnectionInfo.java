@@ -3,6 +3,10 @@ package components;
 import interfaces.P2PAddressI;
 import interfaces.PositionI;
 
+/**
+ * Informations de connexion, position et portee d un noeud du reseau pair a pair
+ * Utilise par le simulateur pour stocker les noeuds du reseau pair a pair
+ */
 public class SimulatorConnectionInfo {
 
     private P2PAddressI address;
@@ -10,13 +14,22 @@ public class SimulatorConnectionInfo {
     private String routingInboundPortURI;
     private PositionI initialPosition;
     private double initialRange;
+    private NodeType nodeType;
 
-    public SimulatorConnectionInfo(P2PAddressI address, String communicationInboundPortURI, String routingInboundPortURI, PositionI initialPosition, double initialRange) {
+    /**
+     * Types des noeuds du reseau
+     */
+    public enum NodeType {
+        INTERNAL, ACCESS_POINT
+    }
+
+    public SimulatorConnectionInfo(P2PAddressI address, String communicationInboundPortURI, String routingInboundPortURI, PositionI initialPosition, double initialRange, NodeType nodeType) {
         this.address = address;
         this.communicationInboundPortURI = communicationInboundPortURI;
         this.routingInboundPortURI = routingInboundPortURI;
         this.initialPosition = initialPosition;
         this.initialRange = initialRange;
+        this.nodeType = nodeType;
     }
 
     public PositionI getInitialPosition() {
@@ -37,6 +50,10 @@ public class SimulatorConnectionInfo {
 
     public String getRoutingInboundPortURI() {
         return routingInboundPortURI;
+    }
+
+    public NodeType getNodeType() {
+        return nodeType;
     }
 
     @Override

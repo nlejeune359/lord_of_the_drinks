@@ -10,6 +10,9 @@ import interfaces.P2PAddressI;
 import interfaces.PositionI;
 import interfaces.RegistrationCI;
 
+/**
+ * Port entrant du simulateur
+ */
 public class SimulatorInboundPort extends AbstractInboundPort implements RegistrationCI  {
 	private static final long serialVersionUID = 1L;
 

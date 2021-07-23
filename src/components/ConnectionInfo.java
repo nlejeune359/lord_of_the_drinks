@@ -3,6 +3,9 @@ package components;
 import interfaces.P2PAddressI;
 import interfaces.PositionI;
 
+/**
+ * Informations de connexion d un noeud du reseau pair a pair
+ */
 public class ConnectionInfo {
 	/**
 	 * @return l’adresse du voisin
